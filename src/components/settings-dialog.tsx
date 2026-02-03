@@ -13,8 +13,7 @@ interface SettingsDialogProps {
 export function SettingsDialog({ onConfigChange }: SettingsDialogProps) {
   const [open, setOpen] = useState(false)
   const [config, setConfig] = useState<AIConfig>({
-    apiKey: '',
-    baseURL: '',
+    cliCommand: 'codex',
     model: 'gpt-4o',
   })
   const [saved, setSaved] = useState(false)
@@ -45,7 +44,7 @@ export function SettingsDialog({ onConfigChange }: SettingsDialogProps) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button variant="ghost" size="icon" className="w-8 h-8" title="API 设置">
+        <Button variant="ghost" size="icon" className="w-8 h-8" title="Codex 设置">
           <Settings className="w-4 h-4" />
         </Button>
       </Dialog.Trigger>
@@ -55,7 +54,7 @@ export function SettingsDialog({ onConfigChange }: SettingsDialogProps) {
         <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md rounded-xl bg-card border border-border shadow-xl p-6 animate-in fade-in">
           <div className="flex items-center justify-between mb-6">
             <Dialog.Title className="text-lg font-semibold">
-              AI API 设置
+              Codex CLI 设置
             </Dialog.Title>
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" className="w-8 h-8">
@@ -66,24 +65,14 @@ export function SettingsDialog({ onConfigChange }: SettingsDialogProps) {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">API Key</label>
+              <label className="text-sm font-medium">Codex CLI 命令</label>
               <Input
-                type="password"
-                value={config.apiKey}
-                onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
-                placeholder="sk-..."
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Base URL</label>
-              <Input
-                value={config.baseURL}
-                onChange={(e) => setConfig({ ...config, baseURL: e.target.value })}
-                placeholder="https://api.openai.com/v1"
+                value={config.cliCommand}
+                onChange={(e) => setConfig({ ...config, cliCommand: e.target.value })}
+                placeholder="codex"
               />
               <p className="text-xs text-muted-foreground">
-                支持 OpenAI 兼容的 API，如智谱、阿里百炼等
+                请输入本机可执行的 Codex CLI 命令，可包含参数
               </p>
             </div>
 
@@ -121,4 +110,3 @@ export function SettingsDialog({ onConfigChange }: SettingsDialogProps) {
     </Dialog.Root>
   )
 }
-

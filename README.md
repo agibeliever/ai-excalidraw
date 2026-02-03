@@ -8,7 +8,7 @@
 - ⚡ **流式响应** - 实时查看 AI 生成过程，边生成边渲染
 - 💬 **多会话管理** - 支持创建多个独立聊天会话
 - 📱 **响应式设计** - 适配桌面和移动设备
-- 🔧 **灵活配置** - 支持 OpenAI 兼容的任意 API（OpenAI、智谱、阿里百炼等）
+- 🔧 **本地 CLI** - 通过 Codex CLI 在本地生成 Excalidraw 元素
 - 💾 **本地存储** - 画布内容和聊天记录自动保存到浏览器
 
 ## 快速开始
@@ -16,6 +16,7 @@
 ### 环境要求
 
 - [Bun](https://bun.sh/) >= 1.0（推荐）或 Node.js >= 18
+- 已安装并登录的 Codex CLI（确保 `codex` 命令可用）
 
 ### 安装
 
@@ -44,26 +45,32 @@ bun run build
 
 构建产物位于 `dist/` 目录。
 
-## 配置 AI API
+## 配置 Codex CLI
 
 首次启动会自动弹出设置对话框，你需要配置：
 
 | 配置项 | 说明 | 示例 |
 |--------|------|------|
-| API Key | 你的 API 密钥 | sk-xxx |
-| Base URL | OpenAI 兼容的 API 地址 | https://api.openai.com/v1 |
-| Model | 模型名称 | gpt-4o |
+| Codex CLI 命令 | 本机可执行的 Codex CLI 命令 | codex |
+| Model | 模型名称（可选） | gpt-4o |
 
-### 支持的 API 服务
-
-任何兼容 OpenAI Chat Completions API 的服务均可使用：
-
-- **OpenAI**: `https://api.openai.com/v1`
-- **智谱 AI**: `https://open.bigmodel.cn/api/paas/v4`
-- **阿里百炼**: `https://dashscope.aliyuncs.com/compatible-mode/v1`
-- **其他**: 任意 OpenAI 兼容的 API
+> 建议先在终端确认 `codex` 命令可用，并已在本机完成登录/授权。
 
 配置保存在浏览器 localStorage 中，刷新页面后无需重新配置。
+
+可选环境变量：
+
+- `VITE_CODEX_CLI_COMMAND`: 覆盖默认 CLI 命令
+- `VITE_CODEX_MODEL`: 覆盖默认模型
+
+### 生产部署
+
+构建后使用内置的静态服务 + Codex CLI API：
+
+```bash
+bun run build
+bun run start
+```
 
 ## 技术栈
 
@@ -92,14 +99,17 @@ ai-excalidraw/
 │   │   │   ├── card.tsx
 │   │   │   ├── input.tsx
 │   │   │   └── textarea.tsx
-│   │   └── settings-dialog.tsx  # API 配置对话框
+│   │   └── settings-dialog.tsx  # Codex CLI 配置对话框
 │   ├── lib/
-│   │   ├── ai.ts                # AI API 调用封装（流式请求）
+│   │   ├── ai.ts                # Codex CLI 调用封装（流式请求）
 │   │   ├── prompt.ts            # Excalidraw 绘图系统提示词
 │   │   └── utils.ts             # 工具函数
 │   ├── App.tsx                  # 应用入口组件
 │   ├── main.tsx                 # React 挂载入口
 │   └── index.css                # 全局样式
+├── server/
+│   ├── codex-handler.ts         # Codex CLI API 处理逻辑
+│   └── index.ts                 # 生产静态服务入口
 ├── public/                      # 静态资源
 ├── index.html                   # HTML 模板
 ├── vite.config.ts               # Vite 配置
@@ -128,6 +138,3 @@ AI 会自动生成对应的 Excalidraw 图形元素。
 如果这个项目对你有帮助，欢迎请作者喝瓶水
 
 <img src="./assets/donate.jpg" alt="赞赏码" width="200" />
-
-
-
