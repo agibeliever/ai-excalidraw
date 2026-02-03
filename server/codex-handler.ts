@@ -66,8 +66,12 @@ export async function handleCodexRequest(
     env.CODEX_MODEL = model
   }
 
-  const child = spawn(cliCommand, [], {
-    shell: true,
+  const shouldUseTty = process.platform !== 'win32'
+  const command = shouldUseTty ? 'script' : cliCommand
+  const args = shouldUseTty ? ['-q', '/dev/null', '-c', cliCommand] : []
+
+  const child = spawn(command, args, {
+    shell: !shouldUseTty,
     env,
     stdio: ['pipe', 'pipe', 'pipe'],
   })
@@ -94,6 +98,6 @@ export async function handleCodexRequest(
     res.end()
   })
 
-  child.stdin.write(payload.prompt)
+  child.stdin.write(`${payload.prompt}\n`)
   child.stdin.end()
 }
