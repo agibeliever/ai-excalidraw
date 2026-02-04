@@ -44,7 +44,7 @@ export function MobileInput({
 
     // 检查配置
     if (!isConfigValid(getAIConfig())) {
-      showToast?.('请先配置 AI API', 3000)
+      showToast?.('请先配置 Codex CLI', 3000)
       return
     }
 
@@ -157,4 +157,3 @@ export function MobileInput({
     </div>
   )
 }
-
